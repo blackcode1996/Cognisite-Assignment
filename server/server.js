@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const { registerUser, loginUser, addTask } = require("./controller/userController");
+const { registerUser, loginUser, addTask,getTasks } = require("./controller/userController");
 const { authenticateUser } = require("./middleware/authMiddleware");
 
 dotenv.config();
@@ -21,6 +21,9 @@ app.post("/login", loginUser);
 
 // Add task
 app.post("/add-task", authenticateUser, addTask);
+
+//Get all Task
+app.get("/tasks",authenticateUser,getTasks)
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}`);

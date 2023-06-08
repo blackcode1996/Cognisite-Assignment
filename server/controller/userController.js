@@ -119,3 +119,28 @@ exports.addTask = (req, res) => {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+  // Get all tasks for a specific user
+exports.getTasks = (req, res) => {
+  const mobile = req.user.mobile;
+
+  let users = [];
+
+  try {
+    const data = fs.readFileSync("users.json");
+    users = JSON.parse(data);
+  } catch (error) {
+    console.log("Error reading users file:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+
+  const user = users.find((user) => user.mobile === mobile);
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const tasks = user.tasks || [];
+
+  res.json({ tasks });
+};
